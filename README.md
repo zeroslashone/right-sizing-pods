@@ -49,7 +49,7 @@ This repo contains a simple Go Web Server and contains only one route `/ping`. T
     kubectl get ingress
     ```
 
-5. Now that we have our app deployed let's sort of get a baseline on the latency of the application. From testing this locally the server takes 20-60µs.
+5. Now that we have our app deployed let's sort of get a baseline on the latency of the application. From testing this locally the server takes 50-100µs.
 
     Latency when running the API locally:
     ![Local Testing Baseline Latency](./images/base_local_latency.png)
@@ -57,3 +57,17 @@ This repo contains a simple Go Web Server and contains only one route `/ping`. T
     Latency when hosted on Azure in US East Zone 1:
     ![Azure Baseline Latency](./images/base_azure_latency.png)
 
+
+6. Now lets run a performance test on the API with the same setup above with 2 concurrent users. Given that net/http creates a new Go routine for each routine it should be able to run parallely on the available 2vCPU's with no impact on the response time.
+    - With 2 Virtual User's:
+        ![2 Virtual Users with a fast API](./images/no_op_2vu.png)
+        It had no impact on response times and the response times were in the expected range.
+        
+        ![Throttling for 2 Virtual Users](./images/no_op_2vu_throttling.png)
+        We observed no throttling at all.
+    - Instead of ramping up the virtual users in small increments I'm going to just cut to me using 100VU's and this seems to be Postman's limit since the the time it takes to process each request is so extremely negligible in comparison to the Kubernetes CFS period(100ms) it should still have no effect on the overall latency and throttling
+        ![2 Virtual Users with a fast API](./images/no_op_100vu.png)
+        It had no impact on response times.
+        
+        ![Throttling for 2 Virtual Users](./images/no_op_100vu_throttling.png)
+        We observed no throttling at all.
