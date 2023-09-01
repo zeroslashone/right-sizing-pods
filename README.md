@@ -11,4 +11,4 @@ This repo contains a simple Go Web Server and contains only one route `/ping`. T
 
 ## Process
 1. First we are going to deploy the app as is onto a cloud provider(in this case Azure because I had some credits remaining and didn't want to let it go to waste) and sort of get a baseline on the latency of the application. From testing this locally the server takes 20-60µs.
-![Local Testing Baseline Latency](https://github.com/zeroslashone/right-sizing-pods/blob/main/base_local_latency.png?raw=true)
+![Local Testing Baseline Latency](./images/base_local_latency.png)
