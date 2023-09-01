@@ -1,18 +1,17 @@
-# Uncomment if running on Cloud Provider with nginx ingress controller
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: joyboy
-#   namespace: default
-# spec:
-#   ingressClassName: nginx
-#   rules:
-#     - http:
-#         paths:
-#           - pathType: Prefix
-#             backend:
-#               service:
-#                 name: joyboy
-#                 port:
-#                   number: 8080
-#             path: /
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: joyboy
+  namespace: default
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            backend:
+              service:
+                name: joyboy
+                port:
+                  number: 8080
+            path: /

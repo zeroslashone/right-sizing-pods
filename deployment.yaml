@@ -22,8 +22,8 @@ spec:
         app: joyboy-multithreaded
     spec:
       containers:
-      # - image: pol905/gooneoone:fast-amd64 (simple ping-pong api)
-      - image: pol905/gooneoone:slow-amd64 # adds a 1B iteration loop to simulate a CPU intensive op before returning the response
+      - image: pol905/gooneoone:fast-amd64 # (simple ping-pong api)
+      # - image: pol905/gooneoone:slow-amd64 # adds a 1B iteration loop to simulate a CPU intensive op before returning the response
         imagePullPolicy: Always
         name: gooneoone
         resources:
