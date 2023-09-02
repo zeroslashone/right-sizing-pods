@@ -58,7 +58,7 @@ This repo contains a simple Go Web Server and contains only one route `/ping`. T
     ![Azure Baseline Latency](./images/base_azure_latency.png)
 
 
-6. Now lets run a performance test on the API with the same setup above with 2 concurrent users. Given that net/http creates a new Go routine for each routine it should be able to run parallely on the available 2vCPU's with no impact on the response time.
+6. Now lets run a performance test on the API with the same setup above with 2 concurrent users. Given that net/http creates a new Go routine for each request it should be able to run parallely on the available 2vCPU's with no impact on the response time.
     - With 2 Virtual User's:
         ![2 Virtual Users with a fast API](./images/no_op_2vu.png)
         It had no impact on response times and the response times were in the expected range.
