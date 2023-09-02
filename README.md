@@ -1,4 +1,4 @@
-# Right sizing your pods
+# Right sizing your pods (CPU Edition)
 
 This repo contains a simple Go Web Server and contains only one route `/ping`. The goal of this repo is to demonstrate the implications of not setting your kubernetes cpu limits right on API response times.
 
@@ -71,3 +71,51 @@ This repo contains a simple Go Web Server and contains only one route `/ping`. T
         
         ![Throttling for 2 Virtual Users](./images/no_op_100vu_throttling.png)
         We observed no throttling at all.
+
+7. Let's now so how badly throttling affects API response times. Uncomment the following line:
+    ```bash
+    - image: pol905/gooneoone:slow-amd64 
+    ```
+    in the deployment.yml file and comment out the following:
+    ```bash
+    - image: pol905/gooneoone:fast-amd64 
+    ```
+    This will make use of the docker image that contains a for loop that loops over billion times before responding to the request. Now lets try to get the baseline response time for this modified API.
+
+    Latency when running the API locally:
+    ![Local Testing Baseline Latency](./images/base_local_modified_latency.png)
+
+    Latency when hosted on Azure in US East Zone 1:
+    ![Azure Baseline Latency](./images/base_azure_modified_latency.png)
+
+8. Given the API takes about ~500ms to process each request. Let's run some benchmarks on this modified API and see what our response time looks like as we ramp up the number of concurrent users.
+    - With 2 Virtual Users:
+    
+        ![2 Virtual Users with a slow API](./images/op_2vu.png)
+        The average response time was in the range of what we saw from azure.
+
+        ![Throttling for 2 Virtual Users](./images/op_2vu_throttling.png)
+        We already start seeing throttling but its very low.
+
+    - With 5 Virtual Users:
+
+        ![5 Virtual Users with a slow API](./images/op_5vu.png)
+        The average response time got worse in comparison to 2VU.
+
+        ![Throttling for 2 Virtual Users](./images/op_5vu_throttling.png)
+        Throttling increases > 10%.
+    
+    - With 10 Virtual Users (Things are about to get worse):
+
+        ![10 Virtual Users with a slow API](./images/op_10vu.png)
+        API response times are almost 2X our baseline :(.
+
+        ![Throttling for 10 Virtual Users](./images/op_10vu_throttling.png)
+        Throttling shot up to ~65%.
+
+
+## Conclusion
+
+Its safe to say that we need the CPU to continue processing the same request even after it exceeds the Kubernetes CFS period of 100ms so **as a rule of thumb if your requests takes < 100ms to process a request it might be easier to just approximate your CPU requirements looking at your throttling trendlines and your concurrency requirements but if it is > 100ms you would need to assign 1 core for every parallel request that you want to serve. For example, lets say you need to serve 6 requests parallely then you would need to assign 6 cores in your kubernetes limits.**
+
+
