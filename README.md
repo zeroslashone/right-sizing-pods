@@ -96,14 +96,6 @@ This repo contains a simple Go Web Server and contains only one route `/ping`. T
 
         ![Throttling for 2 Virtual Users](./images/op_2vu_throttling.png)
         We already start seeing throttling but its very low.
-
-    - With 5 Virtual Users:
-
-        ![5 Virtual Users with a slow API](./images/op_5vu.png)
-        The average response time got worse in comparison to 2VU.
-
-        ![Throttling for 2 Virtual Users](./images/op_5vu_throttling.png)
-        Throttling increases > 10%.
     
     - With 10 Virtual Users (Things are about to get worse):
 
